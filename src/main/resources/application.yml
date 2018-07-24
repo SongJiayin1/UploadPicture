@@ -1,0 +1,24 @@
+spring:
+  servlet:
+    multipart:
+      max-file-size: 1024KB
+      max-request-size: 1024KB
+  profiles:
+    active: dev
+  datasource:
+      driver-class-name: com.mysql.jdbc.Driver
+      url: jdbc:mysql://127.0.0.1:3306/xray
+      username: root
+      password: 123456
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  mvc:
+    static-path-pattern: /**
+  resources:
+    static-locations: classpath\:/META-INF/resources/,classpath\:/resources/,classpath\:/static/,classpath\:/public/,file\:${web.upload-path}
+web:
+  upload-path: C:\Users\Administrator\IdeaProjects\gs-uploading-files\upload-dir
+classpath: /static/,classpath:/public/,file:${web.upload-path}
+

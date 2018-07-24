@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <script src="../js/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/bootstrap-paginator.js"></script>
+</head>
+<body>
+    <table class="table">
+        <thead>
+        </thead>
+        <tbody>
+            <tr>
+                <td><img src="image/cat.jpg" class="img-rounded" width="300" height="300"></td>
+                <td><img src="image/cat.jpg" class="img-rounded" width="300" height="300"></td>
+                <td><img src="image/cat.jpg" class="img-rounded" width="300" height="300"></td>
+                <td><img src="image/cat.jpg" class="img-rounded" width="300" height="300"></td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="example" style="text-align: center"> <ul id="pageLimit"></ul> </div>
+</body>
+<script>
+    $(function () {
+        $.ajax(
+            {
+                url:'/page',
+                type:'GET',
+                data:{'page':1,'count':12},
+                dataType:'JSON',
+                success:function (callback) {
+                    var page_count=callback.page_count;
+                    var page_cont=callback.page_content;
+                    $('tbody').append(page_cont);
+                    $('#last_page').text(page_count)
+                }
+            }
+        )
+
+
+    });
+
+    $('#pageLimit').bootstrapPaginator({
+        currentPage: 1,
+        totalPages: 20,
+    size:"normal",
+        bootstrapMajorVersion: 3,
+        alignment:"right",
+        numberOfPages:8,
+        itemTexts: function (type, page, current) {
+        switch (type) {
+            case "first": return "首页";
+            case "prev": return "上一页";
+            case "next": return "下一页";
+            case "last": return "末页";
+            case "page": return page;
+        }//默认显示的是第一页。
+    },
+    onPageClicked: function (event, originalEvent, type, page){//给每个页眉绑定一个事件，其实就是ajax请求，其中page变量为当前点击的页上的数字。
+        $.ajax({
+            url:'/page',
+            type:'GET',
+            data:{'page':page,'count':12},
+            dataType:'JSON',
+            success:function (callback) {
+                $('tbody').empty();
+                var page_count=callback.page_count;
+                var page_cont=callback.page_content;
+                $('tbody').append(page_cont);
+                $('#last_page').text(page_count)
+            }
+        })
+    }
+    });
+</script>
+</html>
