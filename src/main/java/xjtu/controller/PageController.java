@@ -1,5 +1,7 @@
 package xjtu.controller;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.web.bind.annotation.RequestParam;
 import xjtu.bean.Picture;
 import xjtu.dao.PageRespository;
 import org.springframework.data.domain.Page;
@@ -22,8 +24,10 @@ public class PageController {
 
     @RequestMapping(value = "/page", method=RequestMethod.GET)
     @ResponseBody
-    public Page<Picture> getEntryByPageable(@PageableDefault(value = 15, sort = { "id" }, direction = Sort.Direction.DESC)
-                                                    Pageable pageable) {
+    public Page<Picture> getEntryByPageable(@RequestParam(value = "page", defaultValue = "0") Integer page,
+                                            @RequestParam(value = "size", defaultValue = "16") Integer size) {
+        Sort sort = new Sort(Sort.Direction.DESC, "id");
+        Pageable pageable = new PageRequest(page, size, sort);
         return pageRespository.findAll(pageable);
     }
 }
